@@ -16,6 +16,7 @@ function permutationEquation($p)
         $second = array_search($first, $p) + 1;
         $result[] = $second;
     }
+    return $result;
 }
 
 $fptr = fopen(getenv("OUTPUT_PATH"), "w");

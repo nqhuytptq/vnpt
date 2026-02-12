@@ -12,3 +12,4 @@ function linearSearch($arr, $k)
 $arr = [1, 4, 6, 2, 7, 3];
 $k = 7;
 print_r(linearSearch($arr, $k));
+`

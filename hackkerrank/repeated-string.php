@@ -12,9 +12,9 @@
 function repeatedString($s, $n)
 {
     $countA = substr_count($s, 'a');
-    $lengthS = strlen($s);
-    $fullRepeats = floor($n / $lengthS);
-    $remainder = $n % $lengthS;
+    $length = strlen($s);
+    $fullRepeats = floor($n / $length);
+    $remainder = $n % $length;
     $totalA = $fullRepeats * $countA + substr_count(substr($s, 0, $remainder), 'a');
     return $totalA;
 }

@@ -1,7 +1,16 @@
 <?php
 
 // Complete the catAndMouse function below.
-function catAndMouse($x, $y, $z) {}
+function catAndMouse($x, $y, $z)
+{
+    if (abs($x - $z) < abs($y - $z)) {
+        return "Cat A";
+    } elseif (abs($x - $z) > abs($y - $z)) {
+        return "Cat B";
+    } else {
+        return "Mouse C";
+    }
+}
 
 $fptr = fopen(getenv("OUTPUT_PATH"), "w");
 

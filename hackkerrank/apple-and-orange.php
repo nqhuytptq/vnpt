@@ -28,6 +28,8 @@ function countApplesAndOranges($s, $t, $a, $b, $apples, $oranges)
             $orange_count++;
         }
     }
+    echo $apple_count . "\n";
+    echo $orange_count . "\n";
 }
 
 $first_multiple_input = explode(' ', rtrim(fgets(STDIN)));
