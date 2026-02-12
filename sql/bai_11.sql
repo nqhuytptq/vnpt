@@ -106,4 +106,27 @@ JOIN mon_hoc ON diem.mon_id = mon_hoc.mon_id
 WHERE hoc_sinh.hoc_sinh_id = 1
   AND diem.hoc_ky = 1
   GROUP BY mon_hoc.mon_id, mon_hoc.ten_mon;
+-- Tính % HS khá, giỏi, TB trong 1 lớp, 1 khối
+-- xét điều kiện tốt nghiệp cho HS (học lực)
+-- In phiếu lien lạc và học bạ cho HS
+SELECT
+    hoc_sinh.hoc_sinh_id AS MaHS,
+    hoc_sinh.ho_ten AS TenHS,
+    hoc_sinh.ngay_sinh AS NgaySinh,
+    lop.ten_lop AS TenLop,
+    lop.nam_hoc AS NamHoc,
+    giao_vien.ho_ten AS TenGVCN,
+    mon_hoc.ten_mon AS TenMon,
+    diem.hoc_ky AS HocKy,
+    SUM(diem.diem * loai_kiem_tra.he_so) / SUM(loai_kiem_tra.he_so) AS TBMon
+FROM diem
+JOIN hoc_sinh ON diem.hoc_sinh_id = hoc_sinh.hoc_sinh_id
+JOIN mon_hoc ON diem.mon_id = mon_hoc.mon_id
+JOIN lop ON diem.lop_id = lop.lop_id
+JOIN giao_vien ON lop.gvcn_id = giao_vien.gv_id
+JOIN loai_kiem_tra ON diem.loai_kt_id = loai_kiem_tra.loai_kt_id
+WHERE hoc_sinh.hoc_sinh_id = 1
+  AND diem.hoc_ky = 1
+GROUP BY mon_hoc.mon_id, mon_hoc.ten_mon;
+
 
