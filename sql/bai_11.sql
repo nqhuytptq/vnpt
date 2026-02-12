@@ -106,8 +106,62 @@ JOIN mon_hoc ON diem.mon_id = mon_hoc.mon_id
 WHERE hoc_sinh.hoc_sinh_id = 1
   AND diem.hoc_ky = 1
   GROUP BY mon_hoc.mon_id, mon_hoc.ten_mon;
+  
+  -- Tính điểm trung bình cả học kỳ với 1 hs
+SELECT MaHS, TenHS, HocKy, AVG(TBMon) as TBCaNam
+FROM (SELECT 
+    hoc_sinh.hoc_sinh_id as MaHS,
+    hoc_sinh.ho_ten as TenHS,
+    mon_hoc.ten_mon as TenMon,
+    diem.hoc_ky as HocKy,
+    AVG(diem.diem) as TBMon
+FROM diem
+JOIN hoc_sinh ON diem.hoc_sinh_id = hoc_sinh.hoc_sinh_id
+JOIN mon_hoc ON diem.mon_id = mon_hoc.mon_id
+WHERE hoc_sinh.hoc_sinh_id = 1
+  AND diem.hoc_ky = 1
+  GROUP BY mon_hoc.mon_id, mon_hoc.ten_mon) as TBCaNam
+  GROUP BY MaHS, TenHS, HocKy;
+
+
 -- Tính % HS khá, giỏi, TB trong 1 lớp, 1 khối
+select 
+TenLop,
+ROUND(COUNT(CASE WHEN TBCaNam >= 8.0 THEN 1 END)*100/COUNT(*),2) AS PhanTramHocSinhGioi, 
+ROUND(COUNT(CASE WHEN TBCaNam >= 6.5 AND TBCaNam < 8.0 THEN 1 END)*100/COUNT(*),2) AS PhanTramHocSinhKha,
+ROUND(COUNT(CASE WHEN TBCaNam >= 5.0 AND TBCaNam < 6.5 THEN 1 END)*100/COUNT(*),2) AS PhanTramHocSinhTB
+FROM (SELECT 
+        hoc_sinh.hoc_sinh_id AS MaHS,
+        lop.lop_id AS MaLop,
+        lop.ten_lop AS TenLop,
+        AVG(diem.diem) AS TBCaNam
+    FROM diem
+    JOIN hoc_sinh ON diem.hoc_sinh_id = hoc_sinh.hoc_sinh_id
+    JOIN lop ON diem.lop_id = lop.lop_id
+    WHERE lop.lop_id = 1 AND diem.hoc_ky = 1
+    GROUP BY hoc_sinh.hoc_sinh_id, lop.lop_id) AS DiemTBLop
+GROUP BY TenLop;
+
 -- xét điều kiện tốt nghiệp cho HS (học lực)
+SELECT MaHS, TenHS, HocKy, AVG(TBMon) as TBCaNam, 
+    CASE
+        WHEN AVG(TBMon) >= 5.0 THEN 'Đủ điều kiện tốt nghiệp'
+        WHEN AVG(TBMon) < 5.0 THEN 'Không đủ điều kiện tốt nghiệp'
+    END AS HocLuc
+FROM (SELECT 
+    hoc_sinh.hoc_sinh_id as MaHS,
+    hoc_sinh.ho_ten as TenHS,
+    mon_hoc.ten_mon as TenMon,
+    diem.hoc_ky as HocKy,
+    AVG(diem.diem) as TBMon
+FROM diem
+JOIN hoc_sinh ON diem.hoc_sinh_id = hoc_sinh.hoc_sinh_id
+JOIN mon_hoc ON diem.mon_id = mon_hoc.mon_id
+WHERE hoc_sinh.hoc_sinh_id = 1
+  AND diem.hoc_ky = 1
+  GROUP BY mon_hoc.mon_id, mon_hoc.ten_mon) as TBCaNam
+  GROUP BY MaHS, TenHS, HocKy;
+  
 -- In phiếu lien lạc và học bạ cho HS
 SELECT
     hoc_sinh.hoc_sinh_id AS MaHS,
@@ -126,7 +180,5 @@ JOIN lop ON diem.lop_id = lop.lop_id
 JOIN giao_vien ON lop.gvcn_id = giao_vien.gv_id
 JOIN loai_kiem_tra ON diem.loai_kt_id = loai_kiem_tra.loai_kt_id
 WHERE hoc_sinh.hoc_sinh_id = 1
-  AND diem.hoc_ky = 1
-GROUP BY mon_hoc.mon_id, mon_hoc.ten_mon;
-
+GROUP BY hoc_sinh.hoc_sinh_id, hoc_sinh.ho_ten, hoc_sinh.ngay_sinh, lop.ten_lop, lop.nam_hoc, giao_vien.ho_ten, mon_hoc.mon_id, mon_hoc.ten_mon, diem.hoc_ky;
 
