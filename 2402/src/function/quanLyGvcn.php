@@ -56,9 +56,9 @@ if (isset($_POST['inPhieuDiem'])) {
                         <label>Giáo viên:</label>
                         <select name="gvId" required>
                             <?php foreach ($teachers as $teacher): ?>
-                                <option value="<?= $teacher['gv_id'] ?>">
-                                    <?= $teacher['ho_ten'] ?>
-                                </option>
+                            <option value="<?= $teacher['gv_id'] ?>">
+                                <?= $teacher['ho_ten'] ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                         <br><br>
@@ -70,9 +70,9 @@ if (isset($_POST['inPhieuDiem'])) {
                         <label>Khối:</label>
                         <select name="khoiId" required>
                             <?php foreach ($khois as $khoi): ?>
-                                <option value="<?= $khoi['khoi_id'] ?>">
-                                    <?= $khoi['ten_khoi'] ?>
-                                </option>
+                            <option value="<?= $khoi['khoi_id'] ?>">
+                                <?= $khoi['ten_khoi'] ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                         <br><br>
@@ -96,46 +96,46 @@ if (isset($_POST['inPhieuDiem'])) {
                 <label>Học sinh:</label>
                 <select name="hocSinhId" required>
                     <?php foreach ($students as $student): ?>
-                        <option value="<?= $student['hoc_sinh_id'] ?>">
-                            <?= $student['ho_ten'] ?>
-                        </option>
+                    <option value="<?= $student['hoc_sinh_id'] ?>">
+                        <?= $student['ho_ten'] ?>
+                    </option>
                     <?php endforeach; ?>
                 </select>
                 <br><br>
                 <input type="submit" name="inPhieuDiem" value="In phiếu điểm">
                 <?php if (isset($_POST['inPhieuDiem']) && !empty($inPhieuDiems)): ?>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tên HS</th>
-                                <th>Ngày sinh</th>
-                                <th>Tên lớp</th>
-                                <th>Năm học</th>
-                                <th>Tên GVCN</th>
-                                <th>Học kỳ</th>
-                                <th>Tên môn</th>
-                                <th>TB Môn</th>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên HS</th>
+                            <th>Ngày sinh</th>
+                            <th>Tên lớp</th>
+                            <th>Năm học</th>
+                            <th>Tên GVCN</th>
+                            <th>Học kỳ</th>
+                            <th>Tên môn</th>
+                            <th>TB Môn</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($inPhieuDiems as $inPhieuDiem): ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($inPhieuDiems as $inPhieuDiem): ?>
 
-                                <tr>
-                                    <td><?= $inPhieuDiem['TenHS'] ?></td>
-                                    <td><?= $inPhieuDiem['NgaySinh'] ?></td>
-                                    <td><?= $inPhieuDiem['TenLop'] ?></td>
-                                    <td><?= $inPhieuDiem['NamHoc'] ?></td>
-                                    <td><?= $inPhieuDiem['TenGVCN'] ?></td>
-                                    <td><?= $inPhieuDiem['HocKy'] ?></td>
-                                    <td><?= $inPhieuDiem['TenMon'] ?></td>
-                                    <td><?= $inPhieuDiem['TBMon'] ?></td>
+                        <tr>
+                            <td><?= $inPhieuDiem['TenHS'] ?></td>
+                            <td><?= $inPhieuDiem['NgaySinh'] ?></td>
+                            <td><?= $inPhieuDiem['TenLop'] ?></td>
+                            <td><?= $inPhieuDiem['NamHoc'] ?></td>
+                            <td><?= $inPhieuDiem['TenGVCN'] ?></td>
+                            <td><?= $inPhieuDiem['HocKy'] ?></td>
+                            <td><?= $inPhieuDiem['TenMon'] ?></td>
+                            <td><?= $inPhieuDiem['TBMon'] ?></td>
 
 
-                                <?php endforeach; ?>
+                            <?php endforeach; ?>
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
                 <?php endif; ?>
 
         </div>
@@ -155,15 +155,15 @@ if (isset($_POST['inPhieuDiem'])) {
                 <tbody>
                     <?php foreach ($lopHocs as $lopHoc): ?>
 
-                        <tr>
-                            <td><?= $lopHoc['ho_ten'] ?></td>
-                            <td><?= $lopHoc['ten_khoi'] ?></td>
-                            <td><?= $lopHoc['ten_lop'] ?></td>
-                            <td><?= $lopHoc['nam_hoc'] ?></td>
-                            <td class="actions">
+                    <tr>
+                        <td><?= $lopHoc['ho_ten'] ?></td>
+                        <td><?= $lopHoc['ten_khoi'] ?></td>
+                        <td><?= $lopHoc['ten_lop'] ?></td>
+                        <td><?= $lopHoc['nam_hoc'] ?></td>
+                        <td class="actions">
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     <?php endforeach; ?>
 
                 </tbody>
