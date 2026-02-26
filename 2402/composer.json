@@ -1,0 +1,11 @@
+{
+    "name": "huy/class-management",
+    "description": "quan ly truong hoc",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {}
+}

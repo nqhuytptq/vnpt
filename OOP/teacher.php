@@ -8,7 +8,7 @@ class Teacher extends Person
     function __construct($id, $name, $age)
     {
         parent::__construct($name, $age);
-        $this->id = $id;
+        $this->id = bin2hex(random_bytes(16));
     }
     function getId()
     {
