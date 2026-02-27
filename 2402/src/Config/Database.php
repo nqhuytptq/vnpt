@@ -23,21 +23,3 @@ class Database
         }
     }
 }
-// $diemController = new DiemController();
-// $studentController = new StudentController();
-// $lopController = new LopHocController();
-// $monController = new MonHocController();
-// $loaiController = new LoaiKiemTraController();
-// $hocSinhLopController = new HocSinhLopController();
-// $giangDayController = new GiangDayController();
-// $khoiMonController = new KhoiMonController();
-// $teacherController = new TeacherController();
-
-// $students = $studentController->getAll();
-// $lopHocs = $lopController->getAll();
-// $monHocs = $monController->getAll();
-// $loaiKiemTraIds = $loaiController->getAll();
-// $hocSinhLops = $hocSinhLopController->getAll();
-// $giangDays = $giangDayController->getAll();
-// $khoiMons = $khoiMonController->getAll();
-// $teachers = $teacherController->getAll();
