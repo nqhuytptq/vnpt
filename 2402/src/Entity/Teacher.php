@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-require_once 'Person.php';
+use App\Entity\Person;
+
 class Teacher extends Person
 {
 

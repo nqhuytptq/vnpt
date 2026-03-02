@@ -12,11 +12,12 @@ use Exception;
 class TeacherController
 {
     protected $repository;
-
+    protected $pdo;
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new TeacherRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new TeacherRepository($this->pdo);
     }
 
     public function store($name, $diaChi)
@@ -29,31 +30,30 @@ class TeacherController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
-    {
-        $teachers = $this->repository->getAll();
 
-        foreach ($teachers as $teacher) {
-            echo "Tên: " . $teacher['ho_ten'] . ". Địa chỉ: " . $teacher['dia_chi'] . "<br>";
+    public function process()
+    {
+        $teachers = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['submitGV'])) {
+                $this->store(
+                    $_POST['nameGV'],
+                    $_POST['address']
+                );
+            }
+
+            if (isset($_POST['showListTeacher'])) {
+                $teachers = $this->getAllData();
+            }
         }
+        return $teachers;
     }
-    public function submitRequest()
+    public function __destruct()
     {
-        // $teacherController = new TeacherController();
-
-        if (isset($_POST['submitGV'])) {
-            $this->store(
-                $_POST['nameGV'],
-                $_POST['address']
-            );
-        }
-
-        if (isset($_POST['showListTeacher'])) {
-            $this->index();
-        }
+        $this->pdo = null;
     }
 }

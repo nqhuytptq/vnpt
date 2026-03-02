@@ -12,11 +12,14 @@ use App\Repository\StudentRepository;
 class StudentController
 {
     protected $repository;
+    protected $pdo;
 
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new StudentRepository($db->connect());
+        $this->pdo = $db->connect();
+
+        $this->repository = new StudentRepository($this->pdo);
     }
 
     public function store($name, $ngaySinh, $phai)
@@ -30,31 +33,35 @@ class StudentController
         }
     }
 
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
+    // public function index()
+    // {
+    //     $students = $this->getAllData();
+    //     require __DIR__ . '/../Views/quanLyChung.php';
+    // }
+    public function process()
     {
-        $students = $this->repository->getAll();
+        $students = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        foreach ($students as $student) {
-            echo "Tên: " . $student['ho_ten'] . ". Ngày sinh: " . $student['ngay_sinh'] . "<br>";
+            if (isset($_POST['submitHS'])) {
+                $this->store(
+                    $_POST['nameHS'],
+                    $_POST['ngaySinh'],
+                    $_POST['phai']
+                );
+            }
+            if (isset($_POST['showListStudent'])) {
+                $students = $this->getAllData();
+            }
         }
+        return $students;
     }
-    public function submitRequest()
-    { // $studentController = new StudentController();
-
-        if (isset($_POST['submitHS'])) {
-            $this->store(
-                $_POST['nameHS'],
-                $_POST['ngaySinh'],
-                $_POST['phai']
-            );
-        }
-
-        if (isset($_POST['showListStudent'])) {
-            $this->index();
-        }
+    public function __destruct()
+    {
+        $this->pdo = null;
     }
 }

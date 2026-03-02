@@ -11,11 +11,12 @@ use App\Repository\DiemRepository;
 class DiemController
 {
     protected $repository;
-
+    protected $pdo;
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new DiemRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new DiemRepository($this->pdo);
     }
 
     public function store($hocKy, $hocSinhId, $lopId, $monId, $loaiKiemTraId, $namHoc, $diem)
@@ -28,37 +29,13 @@ class DiemController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
+    public function getDieuKienTNHS($hocSinhId, $hocKy)
     {
-        $diems = $this->repository->getAll();
-
-        foreach ($diems as $diem) {
-            echo "Học kỳ " . $diem['hoc_ky'] . " học sinh " . $diem['ho_ten'] . " học lớp " . $diem['ten_lop'] .
-                " đạt " . $diem['diem'] . " bài kiểm tra " . $diem['ten_loai'] . " môn " . $diem['ten_mon'] . " năm học " . $diem['nam_hoc'] . "<br>";
-        }
-    }
-    public function submitRequest()
-    { // $diemController = new DiemController();
-
-        if (isset($_POST['submitDiem'])) {
-            $this->store(
-                $_POST['hocKy'],
-                $_POST['hocSinhId'],
-                $_POST['lopId'],
-                $_POST['monId'],
-                $_POST['loaiKiemTraId'],
-                $_POST['namHoc'],
-                $_POST['diem'],
-            );
-        }
-
-        if (isset($_POST['showListDiem'])) {
-            $this->index();
-        }
+        return $this->repository->getDieuKienTNHS($hocSinhId, $hocKy);
     }
     public function getTrungBinhTungMonHocKy($hocSinhId, $hocKy)
     {
@@ -68,8 +45,60 @@ class DiemController
     {
         return $this->repository->getTrungBinhHocSinhCacMonTheoHocKy($hocSinhId, $hocKy);
     }
-    public function getDieuKienTNHS($hocSinhId, $hocKy)
+    public function process()
     {
-        return $this->repository->getDieuKienTNHS($hocSinhId, $hocKy);
+        $dieuKienTNHSs = [];
+        $tbTungMons = [];
+        $tbCacMons = [];
+        $dieuKienTNHSs = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['submitDiem'])) {
+                $this->store(
+                    $_POST['hocKy'],
+                    $_POST['hocSinhId'],
+                    $_POST['lopId'],
+                    $_POST['monId'],
+                    $_POST['loaiKiemTraId'],
+                    $_POST['namHoc'],
+                    $_POST['diem'],
+                );
+            }
+
+            if (isset($_POST['showListDiem'])) {
+                $diems = $this->getAllData();
+            }
+
+            if (isset($_POST['kiemTraDieuKienTNHS'])) {
+                $dieuKienTNHSs = $this->getDieuKienTNHS(
+                    $_POST['hocSinhId'],
+                    $_POST['hocKy']
+                );
+            }
+            if (isset($_POST['tinhTrungBinhTungMonHocKy'])) {
+                $tbTungMons = $this->getTrungBinhTungMonHocKy(
+                    $_POST['hocSinhId'],
+                    $_POST['hocKy']
+                );
+            }
+
+            if (isset($_POST['tinhTrungBinhCacMonHocKy'])) {
+                $tbCacMons = $this->getTrungBinhCacMonHocKy(
+                    $_POST['hocSinhId'],
+                    $_POST['hocKy']
+                );
+            }
+
+            if (isset($_POST['kiemTraDieuKienTNHS'])) {
+                $dieuKienTNHSs = $this->getDieuKienTNHS(
+                    $_POST['hocSinhId'],
+                    $_POST['hocKy']
+                );
+            }
+        }
+    }
+    public function __destruct()
+    {
+        $this->pdo = null;
     }
 }

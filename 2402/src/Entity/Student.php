@@ -2,17 +2,19 @@
 
 namespace App\Entity;
 
-require_once 'Person.php';
+use App\Entity\Person;
+
 class Student extends Person
 
 {
     protected $ngaySinh;
     protected $phai;
+
     function __construct($name, $ngaySinh, $phai)
     {
         parent::__construct($name);
         $this->ngaySinh = $ngaySinh;
-        $this->phai = $phai;
+        $this->phai     = $phai;
     }
 
     function getNgaySinh()

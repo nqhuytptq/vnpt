@@ -11,11 +11,13 @@ use Exception;
 class KhoiController
 {
     protected $repository;
+    protected $pdo;
 
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new KhoiRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new KhoiRepository($this->pdo);
     }
 
     public function store($name)
@@ -28,31 +30,35 @@ class KhoiController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
-    {
-        $khois = $this->repository->getAll();
+    // public function index()
+    // {
+    //     $khois = $this->repository->getAll();
 
-        foreach ($khois as $khoi) {
-            echo "Khối: " . $khoi['ten_khoi'] . "<br>";
+    //     foreach ($khois as $khoi) {
+    //         echo "Khối: " . $khoi['ten_khoi'] . "<br>";
+    //     }
+    // }
+    public function process()
+    {
+        $khois = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['submitKhoi'])) {
+                $this->store(
+                    $_POST['nameKhoi']
+                );
+            }
+            if (isset($_POST['showListKhoi'])) {
+                $khois = $this->getAllData();
+            }
+            return $khois;
         }
     }
-    public function submitRequest()
+    public function __destruct()
     {
-        // $khoiController = new KhoiController();
-
-        if (isset($_POST['submitKhoi'])) {
-            $this->store(
-                $_POST['nameKhoi']
-            );
-        }
-
-
-        if (isset($_POST['showListKhoi'])) {
-            $this->index();
-        }
+        $this->pdo = null;
     }
 }

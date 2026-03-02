@@ -11,11 +11,14 @@ use Exception;
 class MonHocController
 {
     protected $repository;
+    protected $pdo;
 
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new MonHocRepository($db->connect());
+        $this->pdo = $db->connect();
+
+        $this->repository = new MonHocRepository($this->pdo);
     }
 
     public function store($name)
@@ -28,31 +31,37 @@ class MonHocController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
-    {
-        $monHocs = $this->repository->getAll();
+    // public function index()
+    // {
+    //     $monHocs = $this->repository->getAll();
 
-        foreach ($monHocs as $monHoc) {
-            echo "Môn học: " . $monHoc['ten_mon'] . "<br>";
+    //     foreach ($monHocs as $monHoc) {
+    //         echo "Môn học: " . $monHoc['ten_mon'] . "<br>";
+    //     }
+    // }
+    public function process()
+    {
+        $monHocs = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['submitMonHoc'])) {
+                $this->store(
+                    $_POST['nameMonHoc']
+                );
+            }
+
+
+            if (isset($_POST['showListMonHoc'])) {
+                $monHocs = $this->getAllData();
+            }
+            return $monHocs;
         }
     }
-    public function submitRequest()
+    public function __destruct()
     {
-        // $monHocController = new MonHocController();
-
-        if (isset($_POST['submitMonHoc'])) {
-            $this->store(
-                $_POST['nameMonHoc']
-            );
-        }
-
-
-        if (isset($_POST['showListMonHoc'])) {
-            $this->index();
-        }
+        $this->pdo = null;
     }
 }

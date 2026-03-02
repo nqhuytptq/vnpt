@@ -11,11 +11,12 @@ use Exception;
 class LopHocController
 {
     protected $repository;
-
+    protected $pdo;
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new LopHocRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new LopHocRepository($this->pdo);
     }
 
     public function store($khoiId, $gvcnId, $tenLop, $namHoc)
@@ -28,38 +29,36 @@ class LopHocController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
-    }
-    public function index()
-    {
-        $lopHocs = $this->repository->getAll();
-
-        foreach ($lopHocs as $lopHoc) {
-            echo "Lớp " . $lopHoc['ten_lop'] . " khối " . $lopHoc['ten_khoi'] . " do " . $lopHoc['ho_ten'] . " chủ nhiệm <br>";
-        }
-    }
-    public function submitRequest()
-    {
-        // $lopHocController = new LopHocController();
-
-        if (isset($_POST['submitLopHoc'])) {
-            $this->store(
-                $_POST['khoiId'],
-                $_POST['gvId'],
-                $_POST['tenLop'],
-                $_POST['namHoc']
-            );
-        }
-
-
-        if (isset($_POST['showListLopHoc'])) {
-            $this->index();
-        }
     }
     public function getPhieuDiem($hocSinhId)
     {
         return $this->repository->getPhieuDiemHS($hocSinhId);
+    }
+    public function process()
+    {
+        $lopHocs = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['submitLopHoc'])) {
+                $this->store(
+                    $_POST['khoiId'],
+                    $_POST['gvId'],
+                    $_POST['tenLop'],
+                    $_POST['namHoc']
+                );
+            }
+            if (isset($_POST['showListLopHoc'])) {
+                $lopHocs = $this->getAllData();
+            }
+            return $lopHocs;
+        }
+    }
+
+
+    public function __destruct()
+    {
+        $this->pdo = null;
     }
 }

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Config\Database;
 use App\Entity\Student;
-
+use PDO;
 
 class StudentRepository
 {

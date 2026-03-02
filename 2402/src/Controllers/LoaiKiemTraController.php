@@ -11,11 +11,13 @@ use Exception;
 class LoaiKiemTraController
 {
     protected $repository;
+    protected $pdo;
 
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new LoaiKiemTraRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new LoaiKiemTraRepository($this->pdo);
     }
 
     public function store($name, $heSo)
@@ -28,34 +30,40 @@ class LoaiKiemTraController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
-    {
-        $loaiKiemTras = $this->repository->getAll();
+    // public function index()
+    // {
+    //     $loaiKiemTras = $this->repository->getAll();
 
-        foreach ($loaiKiemTras as $loaiKiemTra) {
-            echo "Loại Kiểm Tra: " . $loaiKiemTra['ten_loai'] . " - Hệ Số: " . $loaiKiemTra['he_so'] . "<br>";
+    //     foreach ($loaiKiemTras as $loaiKiemTra) {
+    //         echo "Loại Kiểm Tra: " . $loaiKiemTra['ten_loai'] . " - Hệ Số: " . $loaiKiemTra['he_so'] . "<br>";
+    //     }
+    // }
+    public function process()
+    {
+        $loaiKiemTras = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['submitLoaiKiemTra'])) {
+                $this->store(
+                    $_POST['nameLoaiKiemTra'],
+                    $_POST['heSoLoaiKiemTra']
+                );
+            }
+
+
+            if (isset($_POST['showListLoaiKiemTra'])) {
+                $loaiKiemTras = $this->getAllData();
+            }
+
+            return $loaiKiemTras;
         }
     }
-    public function submitRequest()
+    public function __destruct()
     {
-
-
-        // $loaiKiemTraController = new LoaiKiemTraController();
-
-        if (isset($_POST['submitLoaiKiemTra'])) {
-            $this->store(
-                $_POST['nameLoaiKiemTra'],
-                $_POST['heSoLoaiKiemTra']
-            );
-        }
-
-
-        if (isset($_POST['showListLoaiKiemTra'])) {
-            $this->index();
-        }
+        $this->pdo = null;
     }
 }

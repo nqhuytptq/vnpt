@@ -1,35 +1,3 @@
-<?php
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use App\Config\Database;
-use App\Controllers\TeacherController;
-use App\Controllers\StudentController;
-use App\Controllers\KhoiController;
-use App\Controllers\MonHocController;
-use App\Controllers\LoaiKiemTraController;
-
-$studentController = new StudentController();
-$studentController->submitRequest();
-$students = $studentController->getAll();
-
-$teacherController = new TeacherController();
-$teacherController->submitRequest();
-$teachers = $teacherController->getAll();
-
-$khoiController = new KhoiController;
-$khoiController->submitRequest();
-$khois = $khoiController->getAll();
-
-$monController = new MonHocController();
-$monController->submitRequest();
-$monHocs = $monController->getAll();
-
-$loaiController = new LoaiKiemTraController();
-$loaiController->submitRequest();
-$loaiKiemTraIds = $loaiController->getAll();
-
-
-?>
 <html lang="en">
 
 
@@ -56,8 +24,34 @@ $loaiKiemTraIds = $loaiController->getAll();
                 </select><br><br>
                 <input type="submit" name="submitHS" value="Gửi">
             </form>
-            <form method="POST">
+
+            <form action="" method="POST">
                 <input type="submit" name="showListStudent" value="Hiện DSHS">
+                <?php if (!empty($students)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên HS</th>
+                            <th>Ngày sinh</th>
+                            <th>Phái</th>
+                            <th> Chức năng </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $student): ?>
+
+                        <tr>
+                            <td><?= $student['ho_ten'] ?></td>
+                            <td><?= $student['ngay_sinh'] ?></td>
+                            <td><?= $student['phai'] ?></td>
+                            <td></td>
+
+                        </tr>
+                        <?php endforeach; ?>
+
+                    </tbody>
+                </table>
+                <?php endif; ?>
             </form>
 
             <form action="" method="POST">
@@ -68,8 +62,29 @@ $loaiKiemTraIds = $loaiController->getAll();
                 <input type="submit" name="submitKhoi" value="Gửi">
             </form>
             <form method="POST">
-                <input type="submit" name="showListKhoi" value="Hiện DSLK">
+                <input type="submit" name="showListKhoi" value="Hiện DS các khối">
             </form>
+            <?php if (!empty($khois)): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên khối</th>
+                        <th> Chức năng </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($khois as $khoi): ?>
+
+                    <tr>
+                        <td> Khối <?= $khoi['ten_khoi'] ?></td>
+                        <td></td>
+
+                    </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+            <?php endif; ?>
 
             <form action="" method="POST">
                 <h1> Quản lý loại bài kiểm tra: </h1>
@@ -87,6 +102,29 @@ $loaiKiemTraIds = $loaiController->getAll();
             <form method="POST">
                 <input type="submit" name="showListLoaiKiemTra" value="Hiện DS loại bài kiểm tra">
             </form>
+            <?php if (!empty($loaiKiemTras)): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên loại Kiểm Tra</th>
+                        <th>Hệ số </th>
+                        <th> Chức năng </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($loaiKiemTras as $loaiKiemTra): ?>
+
+                    <tr>
+                        <td><?= $loaiKiemTra['ten_loai'] ?></td>
+                        <td><?= $loaiKiemTra['he_so'] ?></td>
+                        <td></td>
+
+                    </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+            <?php endif; ?>
         </div>
         <div class="right">
             <form action="" method="POST">
@@ -101,6 +139,29 @@ $loaiKiemTraIds = $loaiController->getAll();
             <form method="POST">
                 <input type="submit" name="showListTeacher" value="Hiện DSGV">
             </form>
+            <?php if (!empty($teachers)): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên GV</th>
+                        <th>Địa chỉ</th>
+                        <th> Chức năng </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($teachers as $teacher): ?>
+
+                    <tr>
+                        <td><?= $teacher['ho_ten'] ?></td>
+                        <td><?= $teacher['dia_chi'] ?></td>
+                        <td></td>
+
+                    </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+            <?php endif; ?>
             <form action="" method="POST">
                 <h1> Quản lý môn học: </h1>
                 <h1>Nhập thông tin Môn học</h1>
@@ -110,8 +171,28 @@ $loaiKiemTraIds = $loaiController->getAll();
             </form>
             <form method="POST">
                 <input type="submit" name="showListMonHoc" value="Hiện DSMH">
-
             </form>
+            <?php if (!empty($monHocs)): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên môn học</th>
+                        <th> Chức năng </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($monHocs as $monHoc): ?>
+
+                    <tr>
+                        <td><?= $monHoc['ten_mon'] ?></td>
+                        <td></td>
+
+                    </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+            <?php endif; ?>
         </div>
     </div>
 
