@@ -39,6 +39,10 @@ class LopHocController
     }
     public function process()
     {
+        $data = [
+            'lopHocs' => [],
+            'phieuDiems' => []
+        ];
         $lopHocs = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['submitLopHoc'])) {
@@ -50,10 +54,15 @@ class LopHocController
                 );
             }
             if (isset($_POST['showListLopHoc'])) {
-                $lopHocs = $this->getAllData();
+                $data['lopHocs'] = $this->getAllData();
             }
-            return $lopHocs;
+            if (isset($_POST['inPhieuDiem'])) {
+                $data['phieuDiems'] = $this->getPhieuDiem(
+                    $_POST['hocSinhId']
+                );
+            }
         }
+        return $data;
     }
 
 

@@ -16,25 +16,26 @@ class QuanLyDiem
     {
 
         $studentController = new StudentController();
-        $students = $studentController->process();
         $students = $studentController->getAllData();
 
         $monController = new MonHocController();
-        $monHocs = $monController->process();
         $monHocs = $monController->getAllData();
 
         $loaiController = new LoaiKiemTraController();
-        $loaiKiemTras = $loaiController->process();
         $loaiKiemTras = $loaiController->getAllData();
 
 
         $lopController = new LopHocController();
-        $lopHocs = $lopController->process();
         $lopHocs = $lopController->getAllData();
 
         $diemController = new DiemController;
-        $diems = $diemController->process();
-        $diems = $diemController->getAllData();
+        $result = $diemController->process();
+
+        $diems = $result['diems'];
+        $tbTungMons = $result['tbTungMons'];
+        $tbCacMons = $result['tbCacMons'];
+        $dieuKienTNHSs = $result['dieuKienTNHSs'];
+
 
 
         require __DIR__ . '/../Views/quanlyDiem.php';

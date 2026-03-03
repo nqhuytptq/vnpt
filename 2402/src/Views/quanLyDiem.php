@@ -1,70 +1,15 @@
-<?php
-// require_once __DIR__ . '/../../vendor/autoload.php';
-
-// use App\Config\Database;
-// use App\Controllers\StudentController;
-// use App\Controllers\LopHocController;
-// use App\Controllers\MonHocController;
-// use App\Controllers\LoaiKiemTraController;
-// use App\Controllers\DiemController;
-
-// $studentController = new StudentController();
-// $studentController->submitRequest();
-// $students = $studentController->getAll();
-
-// $lopController = new LopHocController();
-// $lopController->submitRequest();
-// $lopHocs = $lopController->getAll();
-
-// $monController = new MonHocController();
-// $monController->submitRequest();
-// $monHocs = $monController->getAll();
-
-// $loaiController = new LoaiKiemTraController();
-// $loaiController->submitRequest();
-// $loaiKiemTraIds = $loaiController->getAll();
-
-// $diemController = new DiemController;
-// $diemController->submitRequest();
-// $diems = $diemController->getAll();
-
-// $tbTungMons = [];
-// if (isset($_POST['tinhTrungBinhTungMonHocKy'])) {
-//     $tbTungMons = $diemController->getTrungBinhTungMonHocKy(
-//         $_POST['hocSinhId'],
-//         $_POST['hocKy']
-//     );
-// }
-
-// $tbCacMons = [];
-// if (isset($_POST['tinhTrungBinhCacMonHocKy'])) {
-//     $tbCacMons = $diemController->getTrungBinhCacMonHocKy(
-//         $_POST['hocSinhId'],
-//         $_POST['hocKy']
-//     );
-// }
-
-// $dieuKienTNHSs = [];
-// if (isset($_POST['kiemTraDieuKienTNHS'])) {
-//     $dieuKienTNHSs = $diemController->getDieuKienTNHS(
-//         $_POST['hocSinhId'],
-//         $_POST['hocKy']
-//     );
-// }
-
-?>
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
     <title>Nhập Điểm</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="/vnpt/2402/css/style.css">
 
 </head>
 
 <body>
-    <?php include_once('../../head.php'); ?>
+    <?php include_once __DIR__ . '/../../head.php'; ?>
     <div class="container1">
         <div class="left">
             <h2>NHẬP ĐIỂM HỌC SINH</h2>
@@ -130,77 +75,10 @@
 
             </form>
             <hr>
-            <h2> Tính điểm trung bình của HS </h2>
-            <form method="POST">
-                <label>Học sinh:</label>
-                <select name="hocSinhId" required>
-                    <?php foreach ($students as $student): ?>
-                    <option value="<?= $student['hoc_sinh_id'] ?>">
-                        <?= $student['ho_ten'] ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-                <br><br>
-                <label>Học kỳ:</label>
-                <select name="hocKy" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-
-                </select>
-                <br><br>
-                <input type="submit" name="tinhTrungBinhTungMonHocKy" value="Tính trung bình học kì từng môn">
-                <input type="submit" name="tinhTrungBinhCacMonHocKy" value="Tính trung bình học kì các môn">
-
-                <?php if (isset($_POST['tinhTrungBinhTungMonHocKy']) && !empty($tbTungMons)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tên HS</th>
-                            <th>Tên Môn</th>
-                            <th>Học kỳ</th>
-                            <th>TBMôn</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($tbTungMons as $tbTungMon): ?>
-
-                        <tr>
-                            <td><?= $tbTungMon['TenHS'] ?></td>
-                            <td><?= $tbTungMon['TenMon'] ?></td>
-                            <td><?= $tbTungMon['HocKy'] ?></td>
-                            <td><?= $tbTungMon['TBMon'] ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-
-                    </tbody>
-                </table>
-                <?php endif; ?>
-                <?php if (isset($_POST['tinhTrungBinhCacMonHocKy']) && !empty($tbCacMons)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tên HS</th>
-                            <th>Học kỳ</th>
-                            <th>TBMôn</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($tbCacMons as $tbCacMon): ?>
-
-                        <tr>
-                            <td><?= $tbCacMon['TenHS'] ?></td>
-                            <td><?= $tbCacMon['HocKy'] ?></td>
-                            <td><?= $tbCacMon['TBCaNam'] ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-
-                    </tbody>
-                </table>
-                <?php endif; ?>
-
+            <form action='' method="POST">
+                <input type="submit" name="showListDiem" value="Hiển thị DS điểm">
             </form>
-        </div>
-        <div class="right">
+            <?php if (!empty($diems)): ?>
             <h3>Danh Sách quản lý</h3>
             <table>
                 <thead>
@@ -235,6 +113,80 @@
 
                 </tbody>
             </table>
+            <?php endif; ?>
+
+        </div>
+        <div class="right">
+            <h2> Tính điểm trung bình của HS </h2>
+            <form method="POST">
+                <label>Học sinh:</label>
+                <select name="hocSinhId" required>
+                    <?php foreach ($students as $student): ?>
+                    <option value="<?= $student['hoc_sinh_id'] ?>">
+                        <?= $student['ho_ten'] ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <br><br>
+                <label>Học kỳ:</label>
+                <select name="hocKy" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+
+                </select>
+                <br><br>
+                <input type="submit" name="tinhTrungBinhTungMonHocKy" value="Tính trung bình học kì từng môn">
+                <input type="submit" name="tinhTrungBinhCacMonHocKy" value="Tính trung bình học kì các môn">
+
+                <?php if (!empty($tbTungMons)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên HS</th>
+                            <th>Tên Môn</th>
+                            <th>Học kỳ</th>
+                            <th>TBMôn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($tbTungMons as $tbTungMon): ?>
+
+                        <tr>
+                            <td><?= $tbTungMon['TenHS'] ?></td>
+                            <td><?= $tbTungMon['TenMon'] ?></td>
+                            <td><?= $tbTungMon['HocKy'] ?></td>
+                            <td><?= $tbTungMon['TBMon'] ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+
+                    </tbody>
+                </table>
+                <?php endif; ?>
+                <?php if (!empty($tbCacMons)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên HS</th>
+                            <th>Học kỳ</th>
+                            <th>TBMôn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($tbCacMons as $tbCacMon): ?>
+
+                        <tr>
+                            <td><?= $tbCacMon['TenHS'] ?></td>
+                            <td><?= $tbCacMon['HocKy'] ?></td>
+                            <td><?= $tbCacMon['TBCaNam'] ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+
+                    </tbody>
+                </table>
+                <?php endif; ?>
+
+            </form>
+
             <hr>
             <h2> Kiểm tra điều kiện Tốt nghiệp của HS </h2>
             <form method="POST">
@@ -255,7 +207,7 @@
                 </select>
                 <br><br>
                 <input type="submit" name="kiemTraDieuKienTNHS" value="Kiểm tra điều kiện tốt nghiệp HS">
-                <?php if (isset($_POST['kiemTraDieuKienTNHS']) && !empty($dieuKienTNHSs)): ?>
+                <?php if (!empty($dieuKienTNHSs)): ?>
                 <table>
                     <thead>
                         <tr>

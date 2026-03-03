@@ -1,49 +1,16 @@
-<?php
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use App\Config\Database;
-use App\Controllers\TeacherController;
-use App\Controllers\StudentController;
-use App\Controllers\KhoiController;
-use App\Controllers\LopHocController;
-use App\Entity\Khoi;
-
-$teacherController = new TeacherController();
-$teacherController->submitRequest();
-$teachers = $teacherController->getAll();
-
-$studentController = new StudentController();
-$studentController->submitRequest();
-$students = $studentController->getAll();
-
-$khoiController = new KhoiController();
-$khoiController->submitRequest();
-$khois = $khoiController->getAll();
-
-$lopController = new LopHocController();
-$lopController->submitRequest();
-$lopHocs = $lopController->getAll();
-
-$inPhieuDiems = [];
-if (isset($_POST['inPhieuDiem'])) {
-    $inPhieuDiems = $lopController->getPhieuDiem(
-        $_POST['hocSinhId']
-    );
-}
-?>
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <title>Quản Lý GVCN</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="/vnpt/2402/css/style.css">
 
 
 </head>
 
 <body>
-    <?php include_once('../../head.php'); ?>
+    <?php include_once __DIR__ . '/../../head.php'; ?>
 
     <div class="container1">
         <div class="left">
@@ -56,9 +23,9 @@ if (isset($_POST['inPhieuDiem'])) {
                         <label>Giáo viên:</label>
                         <select name="gvId" required>
                             <?php foreach ($teachers as $teacher): ?>
-                                <option value="<?= $teacher['gv_id'] ?>">
-                                    <?= $teacher['ho_ten'] ?>
-                                </option>
+                            <option value="<?= $teacher['gv_id'] ?>">
+                                <?= $teacher['ho_ten'] ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                         <br><br>
@@ -70,9 +37,9 @@ if (isset($_POST['inPhieuDiem'])) {
                         <label>Khối:</label>
                         <select name="khoiId" required>
                             <?php foreach ($khois as $khoi): ?>
-                                <option value="<?= $khoi['khoi_id'] ?>">
-                                    <?= $khoi['ten_khoi'] ?>
-                                </option>
+                            <option value="<?= $khoi['khoi_id'] ?>">
+                                <?= $khoi['ten_khoi'] ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                         <br><br>
@@ -88,6 +55,9 @@ if (isset($_POST['inPhieuDiem'])) {
                         <br><br>
                     </div>
                     <button type="submit" name="submitLopHoc" class="btn-add">Thêm </button>
+                </form><br>
+                <form method="POST">
+                    <button type="submit" name="showListLopHoc" class="btn-add">Hiện DS các lớp</button>
                 </form>
             </div>
             <hr>
@@ -96,50 +66,52 @@ if (isset($_POST['inPhieuDiem'])) {
                 <label>Học sinh:</label>
                 <select name="hocSinhId" required>
                     <?php foreach ($students as $student): ?>
-                        <option value="<?= $student['hoc_sinh_id'] ?>">
-                            <?= $student['ho_ten'] ?>
-                        </option>
+                    <option value="<?= $student['hoc_sinh_id'] ?>">
+                        <?= $student['ho_ten'] ?>
+                    </option>
                     <?php endforeach; ?>
                 </select>
                 <br><br>
                 <input type="submit" name="inPhieuDiem" value="In phiếu điểm">
-                <?php if (isset($_POST['inPhieuDiem']) && !empty($inPhieuDiems)): ?>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tên HS</th>
-                                <th>Ngày sinh</th>
-                                <th>Tên lớp</th>
-                                <th>Năm học</th>
-                                <th>Tên GVCN</th>
-                                <th>Học kỳ</th>
-                                <th>Tên môn</th>
-                                <th>TB Môn</th>
+                <?php if (!empty($phieuDiems)): ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên HS</th>
+                            <th>Ngày sinh</th>
+                            <th>Tên lớp</th>
+                            <th>Năm học</th>
+                            <th>Tên GVCN</th>
+                            <th>Học kỳ</th>
+                            <th>Tên môn</th>
+                            <th>TB Môn</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($inPhieuDiems as $inPhieuDiem): ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($phieuDiems as $phieuDiem): ?>
 
-                                <tr>
-                                    <td><?= $inPhieuDiem['TenHS'] ?></td>
-                                    <td><?= $inPhieuDiem['NgaySinh'] ?></td>
-                                    <td><?= $inPhieuDiem['TenLop'] ?></td>
-                                    <td><?= $inPhieuDiem['NamHoc'] ?></td>
-                                    <td><?= $inPhieuDiem['TenGVCN'] ?></td>
-                                    <td><?= $inPhieuDiem['HocKy'] ?></td>
-                                    <td><?= $inPhieuDiem['TenMon'] ?></td>
-                                    <td><?= $inPhieuDiem['TBMon'] ?></td>
+                        <tr>
+                            <td><?= $phieuDiem['TenHS'] ?></td>
+                            <td><?= $phieuDiem['NgaySinh'] ?></td>
+                            <td><?= $phieuDiem['TenLop'] ?></td>
+                            <td><?= $phieuDiem['NamHoc'] ?></td>
+                            <td><?= $phieuDiem['TenGVCN'] ?></td>
+                            <td><?= $phieuDiem['HocKy'] ?></td>
+                            <td><?= $phieuDiem['TenMon'] ?></td>
+                            <td><?= $phieuDiem['TBMon'] ?></td>
 
 
-                                <?php endforeach; ?>
+                            <?php endforeach; ?>
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
                 <?php endif; ?>
 
         </div>
         <div class="right">
+            <?php if (!empty($lopHocs)) : ?>
+            <hr>
 
             <h3>Danh Sách quản lý</h3>
             <table>
@@ -155,19 +127,20 @@ if (isset($_POST['inPhieuDiem'])) {
                 <tbody>
                     <?php foreach ($lopHocs as $lopHoc): ?>
 
-                        <tr>
-                            <td><?= $lopHoc['ho_ten'] ?></td>
-                            <td><?= $lopHoc['ten_khoi'] ?></td>
-                            <td><?= $lopHoc['ten_lop'] ?></td>
-                            <td><?= $lopHoc['nam_hoc'] ?></td>
-                            <td class="actions">
+                    <tr>
+                        <td><?= $lopHoc['ho_ten'] ?></td>
+                        <td><?= $lopHoc['ten_khoi'] ?></td>
+                        <td><?= $lopHoc['ten_lop'] ?></td>
+                        <td><?= $lopHoc['nam_hoc'] ?></td>
+                        <td class="actions">
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     <?php endforeach; ?>
 
                 </tbody>
             </table>
+            <?php endif; ?>
         </div>
     </div>
 </body>

@@ -47,10 +47,13 @@ class DiemController
     }
     public function process()
     {
-        $dieuKienTNHSs = [];
-        $tbTungMons = [];
-        $tbCacMons = [];
-        $dieuKienTNHSs = [];
+        $data = [
+            'diems' => [],
+            'tbTungMons' => [],
+            'tbCacMons' => [],
+            'dieuKienTNHSs' => []
+        ];
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['submitDiem'])) {
@@ -66,36 +69,37 @@ class DiemController
             }
 
             if (isset($_POST['showListDiem'])) {
-                $diems = $this->getAllData();
+                $data['diems'] = $this->getAllData();;
             }
 
             if (isset($_POST['kiemTraDieuKienTNHS'])) {
-                $dieuKienTNHSs = $this->getDieuKienTNHS(
+                $data['dieuKienTNHSs'] = $this->getDieuKienTNHS(
                     $_POST['hocSinhId'],
                     $_POST['hocKy']
                 );
             }
             if (isset($_POST['tinhTrungBinhTungMonHocKy'])) {
-                $tbTungMons = $this->getTrungBinhTungMonHocKy(
+                $data['tbTungMons'] = $this->getTrungBinhTungMonHocKy(
                     $_POST['hocSinhId'],
                     $_POST['hocKy']
                 );
             }
 
             if (isset($_POST['tinhTrungBinhCacMonHocKy'])) {
-                $tbCacMons = $this->getTrungBinhCacMonHocKy(
+                $data['tbCacMons'] = $this->getTrungBinhCacMonHocKy(
                     $_POST['hocSinhId'],
                     $_POST['hocKy']
                 );
             }
 
             if (isset($_POST['kiemTraDieuKienTNHS'])) {
-                $dieuKienTNHSs = $this->getDieuKienTNHS(
+                $data['dieuKienTNHSs'] = $this->getDieuKienTNHS(
                     $_POST['hocSinhId'],
                     $_POST['hocKy']
                 );
             }
         }
+        return $data;
     }
     public function __destruct()
     {

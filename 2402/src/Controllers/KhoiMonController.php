@@ -11,11 +11,12 @@ use Exception;
 class KhoiMonController
 {
     protected $repository;
-
+    protected $pdo;
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new KhoiMonRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new KhoiMonRepository($this->pdo);
     }
 
     public function store($khoiId, $monId)
@@ -28,34 +29,35 @@ class KhoiMonController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
-    {
-        $khoiMons = $this->repository->getAll();
 
-        foreach ($khoiMons as $khoiMon) {
-            echo "Lớp " . $khoiMon['ten_khoi'] . " học môn " . $khoiMon['ten_mon'] . "<br>";
+    public function process()
+    {
+
+        $khoiMons = [];
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+
+
+            if (isset($_POST['submitKhoiMon'])) {
+                $this->store(
+                    $_POST['khoiId'],
+                    $_POST['monId'],
+
+
+                );
+            }
+
+            if (isset($_POST['showListKhoiMon'])) {
+                $khoiMons = $this->getAllData();
+            }
         }
+        return $khoiMons;
     }
-    public function submitRequest()
+    public function __destruct()
     {
-
-        // $khoiMonController = new KhoiMonController();
-
-        if (isset($_POST['submitKhoiMon'])) {
-            $this->store(
-                $_POST['khoiId'],
-                $_POST['monId'],
-
-
-            );
-        }
-
-        if (isset($_POST['showListKhoiMon'])) {
-            $this->index();
-        }
+        $this->pdo = null;
     }
 }

@@ -1,45 +1,23 @@
-<?php
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use App\Config\Database;
-use App\Controllers\KhoiController;
-use App\Controllers\MonHocController;
-use App\Controllers\KhoiMonController;
-
-
-$khoiController = new KhoiController;
-$khoiController->submitRequest();
-$khois = $khoiController->getAll();
-
-$monController = new MonHocController();
-$monController->submitRequest();
-$monHocs = $monController->getAll();
-
-$khoiMonController = new KhoiMonController();
-$khoiMonController->submitRequest();
-$khoiMons = $khoiMonController->getAll();
-
-?>
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <title>Quản Lý môn học các khối</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="/vnpt/2402/css/style.css">
 
 
 </head>
 
 <body>
-    <?php include_once('../../head.php'); ?>
+    <?php include_once __DIR__ . '/../../head.php'; ?>
 
     <div class="container">
         <h1>QUẢN LÝ MÔN HỌC CÁC KHỐI</h1>
 
         <div class="form-section">
             <h3>Thêm Môn học cho các khối</h3>
-            <form>
+            <form method="POST">
                 <div class="form-group">
                     <label>Khối</label>
                     <select name="khoiId" required>
@@ -66,9 +44,13 @@ $khoiMons = $khoiMonController->getAll();
                     <br><br>
                 </div>
 
-                <button type="submitKhoiMon" class="btn-add">Thêm </button>
+                <button type="submit" name="submitKhoiMon" class="btn-add">Thêm </button>
+            </form>
+            <form method="POST">
+                <button type="submit" name="showListKhoiMon" class="btn-add">Hiện DS môn các khối </button>
             </form>
         </div>
+        <?php if (!empty($khoiMons)) : ?>
         <hr>
         <h3>Danh Sách quản lý</h3>
         <table>
@@ -94,6 +76,7 @@ $khoiMons = $khoiMonController->getAll();
 
             </tbody>
         </table>
+        <?php endif; ?>
     </div>
 
 </body>

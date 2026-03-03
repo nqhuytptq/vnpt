@@ -11,11 +11,13 @@ use Exception;
 class HocSinhLopController
 {
     protected $repository;
+    protected $pdo;
 
     public function __construct()
     {
         $db = new Database();
-        $this->repository = new HocSinhLopRepository($db->connect());
+        $this->pdo = $db->connect();
+        $this->repository = new HocSinhLopRepository($this->pdo);
     }
 
     public function store($hocSinhId, $lopId, $namHoc)
@@ -28,38 +30,44 @@ class HocSinhLopController
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getAll()
+    public function getAllData()
     {
         return $this->repository->getAll();
     }
-    public function index()
-    {
-        $hocSinhLops = $this->repository->getAll();
-
-        foreach ($hocSinhLops as $hocSinhLop) {
-            echo "HS: " . $hocSinhLop['ho_ten'] . " học lớp " . $hocSinhLop['ten_lop'] . " <br>";
-        }
-    }
-    public function submitRequest()
-    {
-        // $hocSinhLopController = new HocSinhLopController();
-
-        if (isset($_POST['submitHocSinhLop'])) {
-            $this->store(
-                $_POST['hocSinhId'],
-                $_POST['lopId'],
-                $_POST['namHoc'],
-            );
-        }
-
-
-        if (isset($_POST['showListHocSinhLop'])) {
-            $this->index();
-        }
-    }
-
     public function getTiLeHocSinhCuaLopTheoHocKy($hocSinhId, $hocKy)
     {
         return $this->repository->getTiLeHocSinhCuaLopTheoHocKy($hocSinhId, $hocKy);
+    }
+    public function process()
+    {
+        $data = [
+            'hocSinhLops' => [],
+            'tiLeHSs' => []
+        ];
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
+            if (isset($_POST['submitHocSinhLop'])) {
+                $this->store(
+                    $_POST['hocSinhId'],
+                    $_POST['lopId'],
+                    $_POST['namHoc'],
+                );
+            }
+
+
+            if (isset($_POST['showListHocSinhLop'])) {
+                $data['hocSinhLops'] = $this->getAllData();
+            }
+            if (isset($_POST['tinhTiLeHocSinhCuaLopTheoHocKy'])) {
+                $data['tiLeHSs'] = $this->getTiLeHocSinhCuaLopTheoHocKy(
+                    $_POST['lopId'],
+                    $_POST['hocKy']
+                );
+            }
+        }
+        return $data;
+    }
+    public function __destruct()
+    {
+        $this->pdo = null;
     }
 }

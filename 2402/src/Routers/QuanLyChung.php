@@ -34,7 +34,6 @@ class QuanLyChung
         $loaiKiemTras = $loaiController->process();
 
 
-        //
 
         $lopController = new LopHocController();
         $lopHocs = $lopController->process();
